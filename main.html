@@ -48,14 +48,14 @@
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
 
-                    if (gesture.type == "swipe") {
+                    if (gesture.type === "swipe") {
                         if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2 && gesture.direction[0] > -0.2) {
                             openMenu = true;
                             testGestureStr += "<div>Open Menu</div>"
                         }
                     }
 
-                    if (gesture.type == "keyTap") {
+                    if (gesture.type === "keyTap") {
                         testGestureStr += "<div>Menu click</div>"
                     }
                 }
