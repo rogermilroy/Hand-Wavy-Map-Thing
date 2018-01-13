@@ -10,8 +10,6 @@
 
         var controllerOptions = {enableGestures: true};
 
-        var testGestureOut = document.getElementById("testGestureData");
-        var testGestureStr = "";
         Leap.loop(controllerOptions, function (frame) {
             if (paused) {
                 return;
@@ -40,6 +38,10 @@
                 frameString += "Scale factor: " + scaleFactor.toFixed(2) + "<br />";
             }
             frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
+
+            var testGestureOut = document.getElementById("testGestureData");
+            var testGestureStr = "";
+
             if (frame.gestures.length > 0) {
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
