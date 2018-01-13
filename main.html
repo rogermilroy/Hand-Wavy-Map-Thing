@@ -47,7 +47,7 @@
                     var gesture = frame.gestures[i];
 
                     if (gesture.type == "swipe") {
-                        if (gesture.direction[1] < 0) {
+                        if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2) {
                             testGestureStr += "<div>Open Menu</div>"
                         }
                     }
