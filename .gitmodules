@@ -1,0 +1,3 @@
+[submodule "Open-Health-Charges-Map"]
+	path = Open-Health-Charges-Map
+	url = git@github.com:andrewnicolalde/Open-Health-Charges-Map.git
