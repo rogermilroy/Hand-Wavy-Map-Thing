@@ -2,51 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://js.leapmotion.com/leap-0.6.4.js"></script>
-    <title>Title</title>
+    <title>Hand Wavy Thing</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+        var previousFrame = null;
+        var paused;
+
+        var controllerOptions = {enableGestures: true};
+
+        var testGestureOut = document.getElementById("testGestureData");
+        var testGestureStr = "";
+        Leap.loop(controllerOptions, function (frame) {
+            if (paused) {
+                return;
+            }
+            if (frame.gestures.length > 0) {
+                for (var i = 0; i < frame.gestures.length; i ++) {
+                    var gesture = frame.gestures[i];
+
+                    if (gesture.swipe) {
+                        if (gesture.direction[1] < 0) {
+                            testGestureStr += "<div>Open Menu</div>"
+                        }
+                    }
+                }
+            }
+            testGestureOut.innerHTML = testGestureStr;
+        });
+    </script>
 </head>
 <body>
-
-<script>
-    var controllerOptions= {};
-    Leap.loop(controllerOptions, function (frame) {
-       var frameString = "Frame ID: " + frame.id + "<br />"
-        + "Timestamp: " + frame.timestamp + "<br />" +
-           "Hands: " + frame.hands.length + "<br />" +
-           "Fingers: " + frame.fingers.length + "<br />";
-
-        var handString = "";
-        if (frame.hands.length > 0) {
-            for (var i = 0; i < frame.hands.length; i++) {
-                var hand = frame.hands[i];
-
-                handString += "Hand ID: " + hand.id + "<br />";
-                handString += "Direction: " + vectorToString(hand.direction, 2) + "<br />";
-                handString += "Palm normal: " + vectorToString(hand.palmNormal, 2) + "<br />";
-                handString += "Palm position: " + vectorToString(hand.palmPosition) + " mm<br />";
-                handString += "Palm velocity: " + vectorToString(hand.palmVelocity) + " mm/s<br />";
-                handString += "Sphere center: " + vectorToString(hand.sphereCenter) + " mm<br />";
-                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
-
-                // And so on...
-            }
-        }
-
-        var pointableString = "";
-        if (frame.pointables.length > 0) {
-            for (var i = 0; i < frame.pointables.length; i++) {
-                var pointable = frame.pointables[i];
-
-                pointableString += "Pointable ID: " + pointable.id + "<br />";
-                pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
-                pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
-                pointableString += "Width: "  + pointable.width.toFixed(1) + " mm<br />";
-                pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
-                pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />";
-                pointableString += "Tip velocity: " + vectorToString(pointable.tipVelocity) + " mm/s<br />";
-            }
-        }
-    })
-</script>
+<div id="testGestureData"></div>
 </body>
 </html>
