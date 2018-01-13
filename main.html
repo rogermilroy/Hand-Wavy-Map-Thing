@@ -48,14 +48,16 @@
             var testGestureOut = document.getElementById("testGestureData");
             var testGestureStr = "";
 
-            /*if (frame.hands.length > 0) {
+            if (frame.hands.length > 0) {
                 for (var i = 0; i < frame.hands.length; i++) {
-                    var hand = hands[i];
-                    if (hand.grabStrength === 1) {
-                        screenGrabbed = true;
-                        startVector = hand.palmPosition;
-                        testGestureStr += "<div>grabbed</div>";
-                        testGestureStr += "<div>" + vectorToString(startVector) + "</div>";
+                    var hand = frame.hands[i];
+                    if (!screenGrabbed) {
+                        if (hand.grabStrength === 1) {
+                            screenGrabbed = true;
+                            startVector = hand.palmPosition;
+                            testGestureStr += "<div>grabbed</div>";
+                            testGestureStr += "<div>" + vectorToString(startVector) + "</div>";
+                        }
                     }
 
                     if (screenGrabbed) {
@@ -66,7 +68,7 @@
                         }
                     }
                 }
-            }*/
+            }
 
             if (frame.gestures.length > 0) {
                 // check if there are 2 hands. Print to verify. Just to test!!
@@ -127,6 +129,18 @@
 
         function hasTwoHands( frame) {
             return frame.hands.length === 2;
+        }
+
+        function zoomGesture(hands) {
+            for (var i = 0; i < frame.hands.length; i++) {
+                if (!stump){
+
+                }
+            }
+        }
+
+        function stump(hand) {
+            return hand.fingers.length == 0;
         }
 
     </script>
