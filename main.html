@@ -16,8 +16,32 @@
             if (paused) {
                 return;
             }
+// Display Frame object data
+            var frameOutput = document.getElementById("frameData");
+
+            var frameString = "Frame ID: " + frame.id + "<br />"
+                + "Timestamp: " + frame.timestamp + " &micro;s<br />"
+                + "Hands: " + frame.hands.length + "<br />"
+                + "Fingers: " + frame.fingers.length + "<br />"
+                + "Tools: " + frame.tools.length + "<br />"
+                + "Gestures: " + frame.gestures.length + "<br />";
+
+// Frame motion factors
+            if (previousFrame && previousFrame.valid) {
+                var translation = frame.translation(previousFrame);
+                frameString += "Translation: " + vectorToString(translation) + " mm <br />";
+
+                var rotationAxis = frame.rotationAxis(previousFrame);
+                var rotationAngle = frame.rotationAngle(previousFrame);
+                frameString += "Rotation axis: " + vectorToString(rotationAxis, 2) + "<br />";
+                frameString += "Rotation angle: " + rotationAngle.toFixed(2) + " radians<br />";
+
+                var scaleFactor = frame.scaleFactor(previousFrame);
+                frameString += "Scale factor: " + scaleFactor.toFixed(2) + "<br />";
+            }
+            frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
             if (frame.gestures.length > 0) {
-                for (var i = 0; i < frame.gestures.length; i ++) {
+                for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
 
                     if (gesture.swipe) {
@@ -28,10 +52,53 @@
                 }
             }
             testGestureOut.innerHTML = testGestureStr;
+            previousFrame = frame;
         });
+
+
+        // Store frame for motion functions
+
+        function vectorToString(vector, digits) {
+            if (typeof digits === "undefined") {
+                digits = 1;
+            }
+            return "(" + vector[0].toFixed(digits) + ", "
+                + vector[1].toFixed(digits) + ", "
+                + vector[2].toFixed(digits) + ")";
+        }
+
+        function togglePause() {
+            paused = !paused;
+
+            if (paused) {
+                document.getElementById("pause").innerText = "Resume";
+            } else {
+                document.getElementById("pause").innerText = "Pause";
+            }
+        }
+
+        function pauseForGestures() {
+            if (document.getElementById("pauseOnGesture").checked) {
+                pauseOnGesture = true;
+            } else {
+                pauseOnGesture = false;
+            }
+        }
+
     </script>
 </head>
 <body>
+<h1>Leap Motion JavaScript Sample</h1>
 <div id="testGestureData"></div>
+<div id="main">
+    <button id="pause" onclick="togglePause()">Pause</button>
+    <input type="checkbox" id="pauseOnGesture" onclick="pauseForGestures()">Pause on gesture</input>
+    <h3>Frame data:</h3>
+    <div id="frameData"></div>
+    <div style="clear:both;"></div>
+    <h3>Gesture data:</h3>
+    <div id="gestureData"></div>
+    <div style="clear:both"></div>
+</div>
 </body>
 </html>
