@@ -46,7 +46,7 @@
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
 
-                    if (gesture.swipe) {
+                    if (gesture.type == "swipe") {
                         if (gesture.direction[1] < 0) {
                             testGestureStr += "<div>Open Menu</div>"
                         }
