@@ -45,6 +45,13 @@
             var testGestureStr = "";
 
             if (frame.gestures.length > 0) {
+                // check if there are 2 hands. Print to verify. Just to test!!
+                var gestureData = document.getElementById("gestureData");
+                if (hasTwoHands(frame)) {
+                    gestureData.innerText = "has 2 hands";
+                } else {
+                    gestureData.innerText = "";
+                }
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
 
@@ -92,6 +99,10 @@
             } else {
                 pauseOnGesture = false;
             }
+        }
+
+        function hasTwoHands( frame) {
+            return frame.hands.length === 2;
         }
 
     </script>
