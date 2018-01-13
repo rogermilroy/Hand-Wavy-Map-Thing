@@ -5,16 +5,6 @@
     <title>Hand Wavy Thing</title>
     <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
     <script>
-        var previousFrame = null;
-        var paused;
-
-        var openMenu = false;
-
-        var screenGrabbed = false;
-        var startVector = null;
-        var endVector = null;
-
-        var controllerOptions = {enableGestures: true};
 
         Leap.loop(controllerOptions, function (frame) {
             if (paused) {
@@ -72,12 +62,6 @@
 
             if (frame.gestures.length > 0) {
                 // check if there are 2 hands. Print to verify. Just to test!!
-                var gestureData = document.getElementById("gestureData");
-                if (hasTwoHands(frame)) {
-                    gestureData.innerText = "has 2 hands";
-                } else {
-                    gestureData.innerText = "";
-                }
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
                     if (gesture.type == "swipe") {
