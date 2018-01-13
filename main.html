@@ -48,10 +48,10 @@
             var testGestureOut = document.getElementById("testGestureData");
             var testGestureStr = "";
 
-            if (frame.hands.length > 0) {
+            /*if (frame.hands.length > 0) {
                 for (var i = 0; i < frame.hands.length; i++) {
                     var hand = hands[i];
-                    if (hand.grabStrength == 1) {
+                    if (hand.grabStrength === 1) {
                         screenGrabbed = true;
                         startVector = hand.palmPosition;
                         testGestureStr += "<div>grabbed</div>";
@@ -59,14 +59,14 @@
                     }
 
                     if (screenGrabbed) {
-                        if (hand.grabStrength == 0) {
+                        if (hand.grabStrength === 0) {
                             screenGrabbed = false;
                             endVector = hand.palmPosition;
                             testGestureStr += "<div>" + vectorToString(endVector) + "</div>";
                         }
                     }
                 }
-            }
+            }*/
 
             if (frame.gestures.length > 0) {
                 // check if there are 2 hands. Print to verify. Just to test!!
@@ -78,31 +78,23 @@
                 }
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
+                    if (gesture.type == "swipe") {
+                        if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2 && gesture.direction[0] > -0.2) {
+                            //Opens menu
+                            openMenu = true;
+                            testGestureStr += "<div>Open Menu</div>"
+                        }
+                    }
 
-                    menuChecks(gesture);
+                    if (gesture.type == "keyTap" && openMenu) {
+                        //Click for menu item
+                        testGestureStr += "<div>Menu click</div>"
+                    }
                 }
             }
             testGestureOut.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + testGestureStr + "</div>";
-
             previousFrame = frame;
         });
-
-
-        function menuChecks(gesture) {
-
-            if (gesture.type == "swipe") {
-                if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2 && gesture.direction[0] > -0.2) {
-                    //Opens menu
-                    openMenu = true;
-                    testGestureStr += "<div>Open Menu</div>"
-                }
-            }
-
-            if (gesture.type == "keyTap" && openMenu) {
-                //Click for menu item
-                testGestureStr += "<div>Menu click</div>"
-            }
-        }
 
         // Store frame for motion functions
 
@@ -140,8 +132,8 @@
     </script>
 </head>
 <body>
-<h1>Leap Motion JavaScript Sample</h1>
-<div id="testGestureData"></div>
+<h1>Hand Wavy Map Thing</h1>
+
 <div id="main">
     <button id="pause" onclick="togglePause()">Pause</button>
     <input type="checkbox" id="pauseOnGesture" onclick="pauseForGestures()">Pause on gesture</input>
@@ -151,6 +143,7 @@
     <h3>Gesture data:</h3>
     <div id="gestureData"></div>
     <div style="clear:both"></div>
+    <div id="testGestureData"></div>
 </div>
 </body>
 </html>
