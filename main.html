@@ -54,6 +54,10 @@
                             testGestureStr += "<div>Open Menu</div>"
                         }
                     }
+
+                    if (gesture.type == "keyTap") {
+                        testGestureStr += "<div>Menu click</div>"
+                    }
                 }
             }
             testGestureOut.innerHTML = testGestureStr;
