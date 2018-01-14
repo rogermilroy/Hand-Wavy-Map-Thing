@@ -15,7 +15,7 @@ function LeapFunctions(type) {
             for (var i = 0; i < frame.hands.length; i++) {
                 var hand = frame.hands[i];
                 if (!this.screenGrabbed) {
-                    if (hand.grabStrength === 1) {
+                    if (hand.grabStrength >= 0.9) {
                         this.screenGrabbed = true;
                         this.startVector = hand.palmPosition;
                         console.log("Screen Grabbed: " + this.screenGrabbed);

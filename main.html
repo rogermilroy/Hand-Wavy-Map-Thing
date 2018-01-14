@@ -17,7 +17,7 @@
 
         var controllerOptions = {enableGestures: true};
 
-        LeapFunctions.loop(controllerOptions, function (frame) {
+        Leap.loop(controllerOptions, function (frame) {
             if (paused) {
                 return;
             }
@@ -50,22 +50,37 @@
             var testGestureStr = "";
 
             if (frame.hands.length > 0) {
-                for (var i = 0; i < frame.hands.length; i++) {
-                    var hand = frame.hands[i];
-                    if (!screenGrabbed) {
-                        if (hand.grabStrength >= 0.9) {
-                            screenGrabbed = true;
-                            startVector = hand.palmPosition;
-                            testGestureStr += "<div>grabbed</div>";
-                            testGestureStr += "<div>" + vectorToString(startVector) + "</div>";
+                if (hasTwoHands(frame)) {
+                    if (bothClosed(frame.hands)) {
+                        if(handsOpposing(frame.hands, previousFrame)) {
+                            var closing = handsClosing(frame.hands, previousFrame);
+                            if (closing > 0) {
+                                console.log("Zoom in");
+                            } else if (closing < 0) {
+                                console.log("Zoom out");
+                            } else {
+                                console.log("No Zoom");
+                            }
                         }
                     }
+                } else {
+                    for (var i = 0; i < frame.hands.length; i++) {
+                        var hand = frame.hands[i];
+                        if (!screenGrabbed) {
+                            if (hand.grabStrength >= 0.9) {
+                                screenGrabbed = true;
+                                startVector = hand.palmPosition;
+                                testGestureStr += "<div>grabbed</div>";
+                                testGestureStr += "<div>" + vectorToString(startVector) + "</div>";
+                            }
+                        }
 
-                    if (screenGrabbed) {
-                        if (hand.grabStrength === 0) {
-                            screenGrabbed = false;
-                            endVector = hand.palmPosition;
-                            testGestureStr += "<div>" + vectorToString(endVector) + "</div>";
+                        if (screenGrabbed) {
+                            if (hand.grabStrength <= 0.1) {
+                                screenGrabbed = false;
+                                endVector = hand.palmPosition;
+                                testGestureStr += "<div>" + vectorToString(endVector) + "</div>";
+                            }
                         }
                     }
                 }
@@ -73,16 +88,16 @@
 
             if (frame.gestures.length > 0) {
                 // check if there are 2 hands. Print to verify. Just to test!!
-                var gestureData = document.getElementById("gestureData");
-                if (hasTwoHands(frame)) {
-                    if (handsParting(frame.hands, previousFrame)) {
-                        gestureData.innerText = "hands parting";
-                    } else {
-                        gestureData.innerText = "";
-                    }
-                } else {
-                    gestureData.innerText = "";
-                }
+                // var gestureData = document.getElementById("gestureData");
+                // if (hasTwoHands(frame)) {
+                //     if (handsParting(frame.hands, previousFrame)) {
+                //         gestureData.innerText = "hands parting";
+                //     } else {
+                //         gestureData.innerText = "";
+                //     }
+                // } else {
+                //     gestureData.innerText = "";
+                // }
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
                     if (gesture.type == "swipe") {
@@ -136,28 +151,42 @@
             return frame.hands.length === 2;
         }
 
-        function zoomGesture(hands) {
-            for (var i = 0; i < frame.hands.length; i++) {
-                var hand = frame.hands[i];
-                if (!aStump(hand)){
-                    // TODO do something
-                }
-            }
+        function bothClosed(hands) {
+            return hands[0].grabStrength >= 0.9 && hands[1].grabStrength >= 0.9;
         }
 
-        function aStump(hand) {
-            return hand.fingers.length === 0;
-        }
-
-        function handsParting(hands, previousFrame) {
+        function handsOpposing(hands, previousFrame) {
             var hands2d = [to2d(hands[0].translation(previousFrame)),to2d(hands[1].translation(previousFrame))];
             return dot(hands2d[0], hands2d[1]) < -0.8;
+        }
+
+        function handsClosing(hands, previousFrame) {
+            var pastHand0 = to2d(previousFrame.hands[0].palmPosition);
+            var pastHand1 = to2d(previousFrame.hands[1].palmPosition);
+            var pastDist = length(minus(pastHand0, pastHand1));
+
+            var curHand0 = to2d(hands[0].palmPosition);
+            var curHand1 = to2d(hands[1].palmPosition);
+            var curDist = length(minus(curHand0, curHand1));
+            console.log(curDist - pastDist);
+
+            if (curDist - pastDist > 0.0003) {
+                return 1;
+            } else if (curDist - pastDist < -0.0003) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
 
         function to2d(vec) {
             var xcomp = dot(vec, [1, 0, 0]);
             var zcomp = dot(vec, [0, 0, 1]);
             return toUnit([xcomp, zcomp]);
+        }
+
+        function minus(vec1, vec2) {
+            return [vec1[0]-vec2[0], vec1[1]-vec2[1]];
         }
 
         function toUnit(vec) {
