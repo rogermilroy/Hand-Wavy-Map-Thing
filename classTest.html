@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class Test</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+
+        var leap = new Leap();
+
+        Leap.loop(leap.controllerOptions, function (frame) {
+// Display Frame object data
+            var frameOutput = document.getElementById("frameData");
+
+            var frameString = "Frame ID: " + frame.id + "<br />"
+                + "Timestamp: " + frame.timestamp + " &micro;s<br />"
+                + "Hands: " + frame.hands.length + "<br />"
+                + "Fingers: " + frame.fingers.length + "<br />"
+                + "Tools: " + frame.tools.length + "<br />"
+                + "Gestures: " + frame.gestures.length + "<br />";
+
+// Frame motion factors
+            if (previousFrame && previousFrame.valid) {
+                var translation = frame.translation(previousFrame);
+                frameString += "Translation: " + vectorToString(translation) + " mm <br />";
+
+                var rotationAxis = frame.rotationAxis(previousFrame);
+                var rotationAngle = frame.rotationAngle(previousFrame);
+                frameString += "Rotation axis: " + vectorToString(rotationAxis, 2) + "<br />";
+                frameString += "Rotation angle: " + rotationAngle.toFixed(2) + " radians<br />";
+
+                var scaleFactor = frame.scaleFactor(previousFrame);
+                frameString += "Scale factor: " + scaleFactor.toFixed(2) + "<br />";
+            }
+            frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
+
+            leap.mapMovement(frame);
+
+            leap.menuGestures(frame);
+
+        });
+    </script>
+</head>
+<body>
+<h1>Hand Wavy Map Thing</h1>
+
+<div id="main">
+    <button id="pause" onclick="togglePause()">Pause</button>
+    <input type="checkbox" id="pauseOnGesture" onclick="pauseForGestures()">Pause on gesture</input>
+    <h3>Frame data:</h3>
+    <div id="frameData"></div>
+    <div style="clear:both;"></div>
+    <h3>Gesture data:</h3>
+    <div id="gestureData"></div>
+    <div style="clear:both"></div>
+    <div id="testGestureData"></div>
+</div>
+</body>
+</html>
