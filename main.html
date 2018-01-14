@@ -100,7 +100,7 @@
                 // }
                 for (var i = 0; i < frame.gestures.length; i++) {
                     var gesture = frame.gestures[i];
-                    if (gesture.type == "swipe") {
+                    if (gesture.type === "swipe") {
                         if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2 && gesture.direction[0] > -0.2) {
                             //Opens menu
                             openMenu = true;
@@ -108,7 +108,7 @@
                         }
                     }
 
-                    if (gesture.type == "keyTap" && openMenu) {
+                    if (gesture.type === "keyTap" && openMenu) {
                         //Click for menu item
                         testGestureStr += "<div>Menu click</div>"
                     }
