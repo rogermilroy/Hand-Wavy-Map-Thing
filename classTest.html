@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>Class Test</title>
     <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script src="LeapFunctions.js"></script>
     <script>
 
-        var leap = new Leap();
+        var leap = new LeapFunctions();
 
         Leap.loop(leap.controllerOptions, function (frame) {
 // Display Frame object data
@@ -20,7 +21,7 @@
                 + "Gestures: " + frame.gestures.length + "<br />";
 
 // Frame motion factors
-            if (previousFrame && previousFrame.valid) {
+            if (LeapFunctions.previousFrame && LeapFunctions.previousFrame.valid) {
                 var translation = frame.translation(previousFrame);
                 frameString += "Translation: " + vectorToString(translation) + " mm <br />";
 
@@ -36,7 +37,7 @@
 
             leap.mapMovement(frame);
 
-            leap.menuGestures(frame);
+            //leap.menuGestures(frame);
 
         });
     </script>

@@ -1,11 +1,11 @@
 
-function Leap(type) {
+function LeapFunctions(type) {
     this.previousFrame = null;
     this.openMenu = false;
 
     this.screenGrabbed = false;
     this.startVector = null;
-    this.endVector = null;
+    //this.endVector = null;
 
     this.controllerOptions = {enableGestures: true};
 
@@ -14,29 +14,29 @@ function Leap(type) {
         if (frame.hands.length > 0) {
             for (var i = 0; i < frame.hands.length; i++) {
                 var hand = frame.hands[i];
-                if (!screenGrabbed) {
+                if (!this.screenGrabbed) {
                     if (hand.grabStrength === 1) {
-                        screenGrabbed = true;
-                        startVector = hand.palmPosition;
-                        console.log("Screen Grabbed: " + screenGrabbed);
-                        console.log("Grab Start Vector: " + startVector);
+                        this.screenGrabbed = true;
+                        this.startVector = hand.palmPosition;
+                        console.log("Screen Grabbed: " + this.screenGrabbed);
+                        console.log("Grab Start Vector: " + this.startVector);
                     }
                 }
 
-                if (screenGrabbed) {
+                /*if (screenGrabbed) {
                     if (hand.grabStrength === 0) {
                         screenGrabbed = false;
                         endVector = hand.palmPosition;
                         console.log("Screen Grabbed: " + screenGrabbed);
                         console.log("Grab End Vector:" + endVector);
                     }
-                }
+                }*/
             }
         }
         //TODO Do Something to move the map
     };
 
-    this.menuGestures = function menuGestures(frame) {
+    /*this.menuGestures = function menuGestures(frame) {
         if (frame.gestures.length > 0) {
             // check if there are 2 hands. Print to verify. Just to test!!
             for (var i = 0; i < frame.gestures.length; i++) {
@@ -44,20 +44,20 @@ function Leap(type) {
                 if (gesture.type === "swipe") {
                     if (gesture.direction[1] < -0.2 && gesture.direction[0] < 0.2 && gesture.direction[0] > -0.2) {
                         //Opens menu
-                        openMenu = true;
+                        this.openMenu = true;
                         console.log("Open Menu");
                         //TODO open menu
                     }
                 }
 
-                if (gesture.type === "keyTap" && openMenu) {
+                if (gesture.type === "keyTap" && this.openMenu) {
                     console.log("Clicked");
                     //TODO click menu item
                 }
             }
         }
 
-    };
+    };*/
 
     function vectorToString(vector, digits) {
         if (typeof digits === "undefined") {
