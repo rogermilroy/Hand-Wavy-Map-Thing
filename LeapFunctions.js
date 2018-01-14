@@ -5,6 +5,7 @@ function LeapFunctions(type) {
 
     this.screenGrabbed = false;
     this.startVector = null;
+    this.movementDirection = null
     //this.endVector = null;
 
     this.controllerOptions = {enableGestures: true};
@@ -18,23 +19,27 @@ function LeapFunctions(type) {
                     if (hand.grabStrength === 1) {
                         this.screenGrabbed = true;
                         this.startVector = hand.palmPosition;
+                        this.direction = [hand.translation[0], hand.translation[2]];
                         console.log("Screen Grabbed: " + this.screenGrabbed);
                         console.log("Grab Start Vector: " + this.startVector);
+                        console.log("Direction" + this.direction);
                     }
                 }
 
-                /*if (screenGrabbed) {
+                if (screenGrabbed) {
                     if (hand.grabStrength === 0) {
                         screenGrabbed = false;
-                        endVector = hand.palmPosition;
                         console.log("Screen Grabbed: " + screenGrabbed);
-                        console.log("Grab End Vector:" + endVector);
                     }
-                }*/
+                }
             }
+            return screenGrabbed;
         }
-        //TODO Do Something to move the map
     };
+
+    this.getMovementDirection = function () {
+
+    }
 
     /*this.menuGestures = function menuGestures(frame) {
         if (frame.gestures.length > 0) {
